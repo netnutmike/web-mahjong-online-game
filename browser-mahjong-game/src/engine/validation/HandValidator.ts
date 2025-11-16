@@ -104,11 +104,11 @@ export class HandValidator {
       return this.matchSequence(availableTiles, requirement);
     }
 
-    // For non-sequence requirements, try to find matching tiles
-    const matchedTiles: Tile[] = [];
-    const jokers: Tile[] = [];
-
+    // For non-sequence requirements with count > 1, we need IDENTICAL tiles (pung/pair)
+    // This means tiles with the same type AND value
+    
     // Collect jokers separately
+    const jokers: Tile[] = [];
     for (let i = availableTiles.length - 1; i >= 0; i--) {
       if (availableTiles[i].type === TileType.JOKER) {
         jokers.push(availableTiles[i]);
@@ -116,35 +116,46 @@ export class HandValidator {
       }
     }
 
-    // Try to match non-joker tiles first
-    for (let i = availableTiles.length - 1; i >= 0; i--) {
-      const tile = availableTiles[i];
-      
+    // Group tiles by type:value
+    const tileGroups = new Map<string, Tile[]>();
+    for (const tile of availableTiles) {
       if (this.tileMatchesRequirement(tile, type, specific, values)) {
-        matchedTiles.push(tile);
-        availableTiles.splice(i, 1);
-        
-        if (matchedTiles.length === count) {
-          // Requirement satisfied without jokers
-          return true;
+        const key = `${tile.type}:${tile.value}`;
+        if (!tileGroups.has(key)) {
+          tileGroups.set(key, []);
         }
+        tileGroups.get(key)!.push(tile);
       }
     }
 
-    // Use jokers to fill remaining slots if allowed
-    if (jokerAllowed) {
-      const needed = count - matchedTiles.length;
-      if (jokers.length >= needed) {
-        // Use the needed jokers
-        jokers.splice(0, needed);
+    // Try to find a group with enough identical tiles
+    for (const [key, group] of tileGroups) {
+      const availableCount = group.length;
+      const jokersNeeded = Math.max(0, count - availableCount);
+      
+      if (availableCount + jokers.length >= count) {
+        // We can satisfy this requirement with this group
+        // Remove the tiles from availableTiles
+        for (let i = 0; i < Math.min(count, availableCount); i++) {
+          const tileIndex = availableTiles.indexOf(group[i]);
+          if (tileIndex !== -1) {
+            availableTiles.splice(tileIndex, 1);
+          }
+        }
+        
+        // Use jokers if needed
+        if (jokersNeeded > 0 && jokerAllowed) {
+          jokers.splice(0, jokersNeeded);
+        }
+        
         // Put unused jokers back
         availableTiles.push(...jokers);
         return true;
       }
     }
 
-    // Couldn't satisfy requirement, restore tiles
-    availableTiles.push(...matchedTiles, ...jokers);
+    // Couldn't satisfy requirement, restore jokers
+    availableTiles.push(...jokers);
     return false;
   }
 

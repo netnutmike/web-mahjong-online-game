@@ -27,7 +27,8 @@ export const GameContext = createContext<GameContextValue | undefined>(undefined
 function gameReducer(state: GameState, action: GameAction): GameState {
   // Handle UPDATE_STATE action
   if (action.type === GameActionType.UPDATE_STATE) {
-    return action.payload.state;
+    // Create a new object reference to ensure React detects the change
+    return { ...action.payload.state };
   }
   
   // For other actions, state is managed by the engine
@@ -57,8 +58,34 @@ export function GameProvider({ children, initialCardConfig }: GameProviderProps)
   // Initialize state from engine
   const [state, dispatch] = useReducer(gameReducer, engine.getState());
 
-  // Use a ref to store the processCallOpportunities function so it can call itself
+  // Use refs to store functions so they can call each other
   const processCallOpportunitiesRef = React.useRef<(() => Promise<void>) | null>(null);
+  const continueGameFlowRef = React.useRef<(() => Promise<void>) | null>(null);
+
+  // Helper function to continue game flow (process AI turns until human or call opportunity)
+  React.useEffect(() => {
+    continueGameFlowRef.current = async () => {
+      const state = engine.getState();
+      
+      // If in draw phase and current player is AI, process their turn
+      if (state.turnPhase === 'draw') {
+        const currentPlayer = engine.getPlayer(state.currentPlayer);
+        if (currentPlayer && !currentPlayer.isHuman) {
+          await engine.processTurn();
+          dispatch({ type: GameActionType.UPDATE_STATE, payload: { state: engine.getState() } });
+          
+          // Recursively continue game flow
+          setTimeout(() => continueGameFlowRef.current?.(), 300);
+          return;
+        }
+      }
+      
+      // If in call_opportunity phase, process call opportunities
+      if (state.turnPhase === 'call_opportunity') {
+        setTimeout(() => processCallOpportunitiesRef.current?.(), 300);
+      }
+    };
+  }, [engine]);
 
   // Helper function to process call opportunities after a discard
   React.useEffect(() => {
@@ -81,8 +108,11 @@ export function GameProvider({ children, initialCardConfig }: GameProviderProps)
 
         if (aiCall) {
           // AI wants to call
+          console.log('AI is making a call:', aiCall.callType, 'Player:', aiCall.playerId);
           engine.processCall(aiCall.playerId, aiCall.callType, aiCall.tile);
-          dispatch({ type: GameActionType.UPDATE_STATE, payload: { state: engine.getState() } });
+          const newState = engine.getState();
+          console.log('After processCall - Game status:', newState.gameStatus, 'Winner:', newState.winnerId);
+          dispatch({ type: GameActionType.UPDATE_STATE, payload: { state: newState } });
 
           // If not mahjong, AI needs to discard
           if (aiCall.callType !== CallType.MAHJONG) {
@@ -102,13 +132,14 @@ export function GameProvider({ children, initialCardConfig }: GameProviderProps)
           // No AI calls, check if human has opportunities
           const humanOpportunities = engine.getHumanCallOpportunities();
           console.log('No AI calls. Human opportunities:', humanOpportunities.length);
+          console.log('Human opportunities details:', humanOpportunities);
           if (humanOpportunities.length === 0) {
             // No one wants to call, advance turn
             console.log('Declining call opportunities and advancing turn');
             engine.declineCallOpportunities();
             dispatch({ type: GameActionType.UPDATE_STATE, payload: { state: engine.getState() } });
 
-            // Process next turn if it's an AI
+            // Process next turn
             setTimeout(async () => {
               try {
                 console.log('Processing next turn after decline');
@@ -117,8 +148,8 @@ export function GameProvider({ children, initialCardConfig }: GameProviderProps)
                 console.log('Dispatching state update. New current player:', newState.currentPlayer, 'Phase:', newState.turnPhase);
                 dispatch({ type: GameActionType.UPDATE_STATE, payload: { state: newState } });
                 
-                // Recursively process any new call opportunities from AI discard
-                setTimeout(() => processCallOpportunitiesRef.current?.(), 300);
+                // Continue game flow
+                setTimeout(() => continueGameFlowRef.current?.(), 300);
               } catch (err) {
                 console.error('Error processing next turn:', err);
               }
@@ -128,7 +159,10 @@ export function GameProvider({ children, initialCardConfig }: GameProviderProps)
             const currentState = engine.getState();
             console.log('Human has call opportunities, waiting for user input');
             console.log('Current state - Phase:', currentState.turnPhase, 'Current Player:', currentState.currentPlayer);
+            console.log('Discard pile length:', currentState.discardPile.length);
+            console.log('Last discard:', currentState.discardPile[currentState.discardPile.length - 1]);
             dispatch({ type: GameActionType.UPDATE_STATE, payload: { state: currentState } });
+            console.log('State dispatched, GameBoard should re-render now');
           }
         }
       } catch (err) {
@@ -205,8 +239,8 @@ export function GameProvider({ children, initialCardConfig }: GameProviderProps)
                   await engine.processTurn();
                   dispatch({ type: GameActionType.UPDATE_STATE, payload: { state: engine.getState() } });
                   
-                  // Check if the next turn created call opportunities
-                  setTimeout(() => processCallOpportunitiesRef.current?.(), 300);
+                  // Continue game flow
+                  setTimeout(() => continueGameFlowRef.current?.(), 300);
                 } catch (err) {
                   console.error('Error processing next turn:', err);
                 }

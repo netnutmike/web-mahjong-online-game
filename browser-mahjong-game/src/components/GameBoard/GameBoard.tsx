@@ -35,9 +35,12 @@ export const GameBoard: React.FC = () => {
   // Recalculate whenever state changes
   const humanCallOpportunities = React.useMemo(() => {
     const opportunities = engine?.getHumanCallOpportunities() || [];
-    console.log('GameBoard: humanCallOpportunities recalculated:', opportunities.length, 'Phase:', state.turnPhase);
+    console.log('GameBoard: humanCallOpportunities recalculated:', opportunities.length, 'Phase:', state.turnPhase, 'Discard pile:', state.discardPile.length);
+    if (opportunities.length > 0) {
+      console.log('GameBoard: FOUND OPPORTUNITIES!', opportunities);
+    }
     return opportunities;
-  }, [engine, state.turnPhase]);
+  }, [engine, state.turnPhase, state.discardPile.length]);
 
   // Handle tile selection from rack
   const handleTileSelect = (tile: Tile) => {

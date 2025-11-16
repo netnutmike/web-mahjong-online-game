@@ -343,7 +343,8 @@ export class GameEngine {
     return this.ruleEngine.getCallOpportunities(
       discardedTile,
       this.state.currentPlayer,
-      players
+      players,
+      this.handValidator
     );
   }
 
@@ -686,7 +687,9 @@ export class GameEngine {
     const allOpportunities = this.evaluateCallOpportunity(lastDiscard);
 
     // Filter for human player
-    return allOpportunities.filter(opp => opp.playerId === humanPlayer.id);
+    const humanOpportunities = allOpportunities.filter(opp => opp.playerId === humanPlayer.id);
+    
+    return humanOpportunities;
   }
 
   /**

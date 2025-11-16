@@ -144,12 +144,14 @@ export class RuleEngine {
    * @param discardedTile - The tile that was discarded
    * @param currentPlayer - The player who discarded the tile
    * @param players - Array of all players with their hands
+   * @param handValidator - Optional HandValidator to validate mahjong calls
    * @returns Array of call opportunities
    */
   getCallOpportunities(
     discardedTile: Tile,
     currentPlayer: number,
-    players: Array<{ id: number; hand: Tile[] }>
+    players: Array<{ id: number; hand: Tile[] }>,
+    handValidator?: unknown
   ): CallOpportunity[] {
     const opportunities: CallOpportunity[] = [];
 
@@ -160,31 +162,48 @@ export class RuleEngine {
         continue;
       }
 
+      // Check for all possible call types
+      
       // Check for mahjong (highest priority)
+      // If handValidator is provided, do full validation; otherwise just check tile count
       const mahjongResult = this.validateMahjongCall(player.hand, discardedTile);
       if (mahjongResult.isValid) {
-        opportunities.push({
-          playerId: player.id,
-          callType: CallType.MAHJONG,
-          tile: discardedTile
-        });
-        continue; // Mahjong takes precedence over other calls
+        // If we have a handValidator, verify the hand actually wins
+        if (handValidator) {
+          const testHand = [...player.hand, discardedTile];
+          const validation = handValidator.validateHand(testHand, []);
+          if (validation.isValid) {
+            opportunities.push({
+              playerId: player.id,
+              callType: CallType.MAHJONG,
+              tile: discardedTile
+            });
+          }
+        } else {
+          // No validator, just add the opportunity (will be validated later)
+          opportunities.push({
+            playerId: player.id,
+            callType: CallType.MAHJONG,
+            tile: discardedTile
+          });
+        }
       }
 
       // Check for kong
       const kongResult = this.validateKongCall(player.hand, discardedTile);
       if (kongResult.isValid) {
+        console.log(`Player ${player.id} can call KONG on ${discardedTile.type}:${discardedTile.value}`);
         opportunities.push({
           playerId: player.id,
           callType: CallType.KONG,
           tile: discardedTile
         });
-        continue; // Kong takes precedence over pung
       }
 
       // Check for pung
       const pungResult = this.validatePungCall(player.hand, discardedTile);
       if (pungResult.isValid) {
+        console.log(`Player ${player.id} can call PUNG on ${discardedTile.type}:${discardedTile.value}`);
         opportunities.push({
           playerId: player.id,
           callType: CallType.PUNG,

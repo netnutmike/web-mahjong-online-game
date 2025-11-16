@@ -13,6 +13,19 @@ interface DiscardPileProps {
 export const DiscardPile: React.FC<DiscardPileProps> = ({ discardedTiles }) => {
   const mostRecentIndex = discardedTiles.length - 1;
 
+  const abbreviations: Record<string, string> = {
+    'bamboo': 'BAM',
+    'character': 'CRAK',
+    'dot': 'DOT',
+    'wind': 'WIND',
+    'dragon': 'DRAG',
+    'joker': 'JOKER'
+  };
+
+  const getTypeAbbreviation = (type: string): string => {
+    return abbreviations[type] || type.toUpperCase();
+  };
+
   return (
     <div className="discard-pile">
       <div className="discard-pile-label">Discard Pile</div>
@@ -28,7 +41,7 @@ export const DiscardPile: React.FC<DiscardPileProps> = ({ discardedTiles }) => {
               }`}
             >
               <div className="discard-tile-content">
-                <span className="discard-tile-type">{tile.type}</span>
+                <span className="discard-tile-type">{getTypeAbbreviation(tile.type)}</span>
                 <span className="discard-tile-value">{tile.value}</span>
               </div>
             </div>

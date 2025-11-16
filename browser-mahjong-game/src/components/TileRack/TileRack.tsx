@@ -18,7 +18,7 @@ type SortMode = 'suit-value' | 'value';
 const getTileTypeAbbreviation = (type: string): string => {
   const abbreviations: Record<string, string> = {
     'bamboo': 'BAM',
-    'character': 'CRACK',
+    'character': 'CRAK',
     'dot': 'DOT',
     'wind': 'WIND',
     'dragon': 'DRAG',

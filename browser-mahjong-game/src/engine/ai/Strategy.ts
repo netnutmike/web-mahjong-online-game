@@ -117,7 +117,10 @@ export class Strategy {
   ): CallDecision {
     // Validate that the hand is actually a winning hand
     const testHand = [...hand, tile];
+    console.log('decideMahjongCall: Testing hand with', testHand.length, 'tiles');
+    console.log('Hand tiles:', testHand.map(t => `${t.type}:${t.value}`).join(', '));
     const validation = this.handValidator.validateHand(testHand, exposedSets);
+    console.log('Validation result:', validation);
 
     if (validation.isValid) {
       return {
