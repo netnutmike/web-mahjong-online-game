@@ -151,29 +151,7 @@ export const GameBoard: React.FC = () => {
     }
   }, [isHumanTurn, state.turnPhase, state.gameStatus, dispatch]);
 
-  // Auto-decline call opportunities if human has none (AI-only opportunities)
-  useEffect(() => {
-    if (
-      state.turnPhase === TurnPhase.CALL_OPPORTUNITY &&
-      humanCallOpportunities.length === 0 &&
-      state.gameStatus === GameStatus.IN_PROGRESS
-    ) {
-      // Give a brief moment for UI to update, then auto-decline
-      const timer = setTimeout(async () => {
-        try {
-          console.log('Auto-declining call opportunities (no human opportunities)');
-          await dispatch({
-            type: GameActionType.DECLINE_CALL
-          });
-        } catch (err) {
-          setError(err instanceof Error ? err : 'Failed to process call opportunity');
-          console.error('Error auto-declining call:', err);
-        }
-      }, 100);
 
-      return () => clearTimeout(timer);
-    }
-  }, [state.turnPhase, humanCallOpportunities.length, state.gameStatus, dispatch]);
 
   // Get other players for indicators
   const topPlayer = state.players?.[2];

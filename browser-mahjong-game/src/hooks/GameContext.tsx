@@ -129,14 +129,17 @@ export function GameProvider({ children, initialCardConfig }: GameProviderProps)
                   } else {
                     // No AI calls, check if human has opportunities
                     const humanOpportunities = engine.getHumanCallOpportunities();
+                    console.log('No AI calls. Human opportunities:', humanOpportunities.length);
                     if (humanOpportunities.length === 0) {
                       // No one wants to call, advance turn
+                      console.log('Declining call opportunities and advancing turn');
                       engine.declineCallOpportunities();
                       dispatch({ type: GameActionType.UPDATE_STATE, payload: { state: engine.getState() } });
 
                       // Process next turn if it's an AI
                       setTimeout(async () => {
                         try {
+                          console.log('Processing next turn after decline');
                           await engine.processTurn();
                           dispatch({ type: GameActionType.UPDATE_STATE, payload: { state: engine.getState() } });
                         } catch (err) {
