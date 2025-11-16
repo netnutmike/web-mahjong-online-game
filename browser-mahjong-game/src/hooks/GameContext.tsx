@@ -104,9 +104,11 @@ export function GameProvider({ children, initialCardConfig }: GameProviderProps)
               // Process AI call decisions
               const lastDiscard = engine.getState().discardPile[engine.getState().discardPile.length - 1];
               const opportunities = engine.evaluateCallOpportunity(lastDiscard);
+              console.log('Call opportunities found:', opportunities.length);
               
               // Give UI time to update before processing AI decisions
               setTimeout(async () => {
+                console.log('setTimeout fired - processing AI call decisions');
                 try {
                   const aiCall = await engine.processAICallDecisions(opportunities);
 
