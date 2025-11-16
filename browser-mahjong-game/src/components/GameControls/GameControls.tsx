@@ -41,9 +41,8 @@ export const GameControls: React.FC<GameControlsProps> = ({
     opp => opp.callType === CallType.MAHJONG
   );
 
-  const showCallButtons =
-    turnPhase === TurnPhase.CALL_OPPORTUNITY &&
-    humanCallOpportunities.length > 0;
+  const showCallButtons = turnPhase === TurnPhase.CALL_OPPORTUNITY;
+  const hasHumanOpportunities = humanCallOpportunities.length > 0;
 
   const showNewGameButton = gameStatus !== GameStatus.IN_PROGRESS;
 
@@ -64,7 +63,9 @@ export const GameControls: React.FC<GameControlsProps> = ({
       {/* Call Action Buttons */}
       {showCallButtons && (
         <div className="game-controls-section">
-          <div className="call-buttons-label">Call Actions Available:</div>
+          <div className="call-buttons-label">
+            {hasHumanOpportunities ? 'Call Actions Available:' : 'Waiting for AI decisions...'}
+          </div>
           <div className="call-buttons">
             {canCallMahjong && (
               <button
@@ -95,7 +96,7 @@ export const GameControls: React.FC<GameControlsProps> = ({
                 className="game-control-button call-button call-button-decline"
                 onClick={onDeclineCall}
               >
-                Pass
+                {hasHumanOpportunities ? 'Pass' : 'Continue Game'}
               </button>
             )}
           </div>
