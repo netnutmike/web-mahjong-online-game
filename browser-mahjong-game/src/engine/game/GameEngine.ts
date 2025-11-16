@@ -588,10 +588,9 @@ export class GameEngine {
    */
   declineCallOpportunities(): void {
     if (this.state.turnPhase !== TurnPhase.CALL_OPPORTUNITY) {
-      throw new GameError(
-        ErrorType.INVALID_MOVE,
-        'No call opportunity to decline'
-      );
+      // Already moved past call opportunity phase, just return
+      console.log('declineCallOpportunities called but not in CALL_OPPORTUNITY phase, ignoring');
+      return;
     }
 
     // Advance to next player
