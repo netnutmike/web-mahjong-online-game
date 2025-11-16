@@ -48,7 +48,11 @@ interface GameProviderProps {
  */
 export function GameProvider({ children, initialCardConfig }: GameProviderProps) {
   // Initialize game engine
-  const [engine] = React.useState(() => new GameEngine(initialCardConfig));
+  const [engine] = React.useState(() => {
+    const gameEngine = new GameEngine(initialCardConfig);
+    gameEngine.initializeGame(); // Initialize the game immediately
+    return gameEngine;
+  });
   
   // Initialize state from engine
   const [state, dispatch] = useReducer(gameReducer, engine.getState());

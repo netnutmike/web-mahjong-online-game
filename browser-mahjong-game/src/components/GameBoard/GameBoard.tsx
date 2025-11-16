@@ -28,7 +28,7 @@ export const GameBoard: React.FC = () => {
   const [error, setError] = useState<Error | string | null>(null);
 
   // Find the human player (player 0)
-  const humanPlayer = state.players[0];
+  const humanPlayer = state.players?.[0];
   const isHumanTurn = state.currentPlayer === 0;
 
   // Get call opportunities for human player
@@ -152,12 +152,26 @@ export const GameBoard: React.FC = () => {
   }, [isHumanTurn, state.turnPhase, state.gameStatus, dispatch]);
 
   // Get other players for indicators
-  const topPlayer = state.players[2];
-  const rightPlayer = state.players[1];
-  const leftPlayer = state.players[3];
+  const topPlayer = state.players?.[2];
+  const rightPlayer = state.players?.[1];
+  const leftPlayer = state.players?.[3];
 
   // Get winner information if game is won
   const winnerInfo = state.gameStatus === GameStatus.WON && engine ? engine.getWinnerInfo() : null;
+
+  // If game is not initialized yet, show loading state
+  if (!humanPlayer) {
+    return (
+      <div className="game-board">
+        <div className="game-board-header">
+          <h1 className="game-title">American Mahjong</h1>
+        </div>
+        <div className="game-board-main">
+          <div className="loading-message">Initializing game...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="game-board">
