@@ -1,0 +1,89 @@
+.error-message {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin: 12px 0;
+  animation: slideIn 0.3s ease-out;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  /* Enable hardware acceleration */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) translateZ(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) translateZ(0);
+  }
+}
+
+.error-message-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.error-message-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.error-message-text {
+  font-size: 14px;
+  line-height: 1.5;
+  color: inherit;
+}
+
+.error-message-dismiss {
+  background: none;
+  border: none;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 12px;
+  color: inherit;
+  opacity: 0.7;
+  transition: opacity var(--transition-fast, 0.15s) ease-out,
+              transform var(--transition-fast, 0.15s) ease-out;
+  flex-shrink: 0;
+  /* Enable hardware acceleration */
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.error-message-dismiss:hover {
+  opacity: 1;
+  transform: scale(1.1) translateZ(0);
+}
+
+.error-message-dismiss:active {
+  transform: scale(0.95) translateZ(0);
+}
+
+/* Severity variants */
+.error-message-error {
+  background-color: #ffebee;
+  border: 1px solid #ef5350;
+  color: #c62828;
+}
+
+.error-message-warning {
+  background-color: #fff3e0;
+  border: 1px solid #ffa726;
+  color: #e65100;
+}
+
+.error-message-info {
+  background-color: #e3f2fd;
+  border: 1px solid #42a5f5;
+  color: #1565c0;
+}

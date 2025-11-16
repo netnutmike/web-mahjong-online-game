@@ -1,0 +1,219 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "American Mahjong Card Configuration",
+  "description": "Schema for defining valid winning hand patterns for American Mahjong",
+  "type": "object",
+  "required": ["year", "version", "patterns"],
+  "properties": {
+    "year": {
+      "type": "integer",
+      "description": "The year this card configuration is for",
+      "minimum": 2000,
+      "examples": [2024, 2025]
+    },
+    "version": {
+      "type": "string",
+      "description": "Version of this card configuration",
+      "pattern": "^\\d+\\.\\d+$",
+      "examples": ["1.0", "1.1"]
+    },
+    "patterns": {
+      "type": "array",
+      "description": "Array of valid winning hand patterns",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/definitions/handPattern"
+      }
+    }
+  },
+  "definitions": {
+    "handPattern": {
+      "type": "object",
+      "description": "A valid winning hand pattern",
+      "required": ["id", "name", "category", "points", "tiles"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for this pattern",
+          "minLength": 1,
+          "examples": ["2024_year", "consecutive_run", "winds_dragons"]
+        },
+        "name": {
+          "type": "string",
+          "description": "Display name of the pattern",
+          "minLength": 1,
+          "examples": ["2024", "Consecutive Run", "Winds and Dragons"]
+        },
+        "category": {
+          "type": "string",
+          "description": "Category this pattern belongs to",
+          "examples": ["Year", "Consecutive", "Winds-Dragons", "Special"]
+        },
+        "points": {
+          "type": "integer",
+          "description": "Point value of this pattern",
+          "minimum": 0,
+          "examples": [25, 30, 50]
+        },
+        "tiles": {
+          "type": "array",
+          "description": "Tile requirements for this pattern",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/tileRequirement"
+          }
+        }
+      }
+    },
+    "tileRequirement": {
+      "type": "object",
+      "description": "Specification for a group of tiles in a pattern",
+      "required": ["type", "count", "jokerAllowed"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Type of tiles required",
+          "enum": [
+            "bamboo",
+            "character",
+            "dot",
+            "wind",
+            "dragon",
+            "flower",
+            "joker",
+            "any",
+            "same_suit"
+          ],
+          "examples": ["bamboo", "wind", "any", "same_suit"]
+        },
+        "count": {
+          "type": "integer",
+          "description": "Number of tiles required",
+          "minimum": 1,
+          "maximum": 14,
+          "examples": [2, 3, 4, 5]
+        },
+        "sequence": {
+          "type": "boolean",
+          "description": "Whether tiles must be in sequential order (e.g., 1-2-3)",
+          "default": false,
+          "examples": [true, false]
+        },
+        "specific": {
+          "type": "array",
+          "description": "Specific tile values required (deprecated, use 'values' instead)",
+          "items": {
+            "oneOf": [
+              { "type": "integer", "minimum": 0, "maximum": 9 },
+              { "type": "string", "enum": ["east", "south", "west", "north", "red", "green", "white"] }
+            ]
+          },
+          "examples": [[1, 2, 3], [2, 4, 6, 8], ["east", "south"]]
+        },
+        "values": {
+          "type": "array",
+          "description": "Specific tile values required or allowed",
+          "items": {
+            "oneOf": [
+              { "type": "integer", "minimum": 0, "maximum": 9 },
+              { "type": "string", "enum": ["east", "south", "west", "north", "red", "green", "white"] }
+            ]
+          },
+          "examples": [[1, 2, 3, 4, 5, 6, 7, 8, 9], [2, 4, 6, 8], ["red", "green", "white"]]
+        },
+        "jokerAllowed": {
+          "type": "boolean",
+          "description": "Whether jokers can substitute for tiles in this requirement",
+          "examples": [true, false]
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "year": 2025,
+      "version": "1.0",
+      "patterns": [
+        {
+          "id": "2468",
+          "name": "2468",
+          "category": "Evens",
+          "points": 25,
+          "tiles": [
+            {
+              "type": "any",
+              "count": 3,
+              "values": [2],
+              "jokerAllowed": true
+            },
+            {
+              "type": "any",
+              "count": 3,
+              "values": [4],
+              "jokerAllowed": true
+            },
+            {
+              "type": "any",
+              "count": 3,
+              "values": [6],
+              "jokerAllowed": true
+            },
+            {
+              "type": "any",
+              "count": 3,
+              "values": [8],
+              "jokerAllowed": true
+            },
+            {
+              "type": "any",
+              "count": 2,
+              "jokerAllowed": true
+            }
+          ]
+        },
+        {
+          "id": "consecutive_run",
+          "name": "Consecutive Run",
+          "category": "Consecutive",
+          "points": 25,
+          "tiles": [
+            {
+              "type": "same_suit",
+              "count": 9,
+              "sequence": true,
+              "values": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+              "jokerAllowed": true
+            },
+            {
+              "type": "wind",
+              "count": 3,
+              "jokerAllowed": false
+            },
+            {
+              "type": "any",
+              "count": 2,
+              "jokerAllowed": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "additionalNotes": {
+    "tileTypes": {
+      "bamboo": "Bamboo suit tiles (1-9)",
+      "character": "Character suit tiles (1-9)",
+      "dot": "Dot suit tiles (1-9)",
+      "wind": "Wind tiles (east, south, west, north)",
+      "dragon": "Dragon tiles (red, green, white)",
+      "flower": "Flower tiles (special tiles)",
+      "joker": "Joker tiles (wild cards)",
+      "any": "Any tile type",
+      "same_suit": "All tiles must be from the same suit (bamboo, character, or dot)"
+    },
+    "standardHandSize": "A standard American Mahjong hand consists of 14 tiles",
+    "jokerRules": "Jokers can substitute for any tile when jokerAllowed is true, but cannot be used for flowers, winds, or dragons in most patterns",
+    "fileNaming": "Card configuration files should be named {year}.json (e.g., 2024.json, 2025.json)",
+    "validation": "All card configurations are validated on load to ensure structural correctness"
+  }
+}

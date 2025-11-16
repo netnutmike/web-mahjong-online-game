@@ -1,0 +1,213 @@
+# Implementation Plan
+
+- [x] 1. Initialize project structure and configuration
+  - Create Vite + React + TypeScript project with proper configuration
+  - Set up directory structure as defined in design document
+  - Configure tsconfig.json for strict type checking
+  - Create .gitignore file for Node.js/React projects
+  - Add GPL-3.0 LICENSE file
+  - Configure Renovate for dependency management (renovate.json)
+  - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5_
+
+- [x] 2. Create core data models and types
+  - Define TypeScript interfaces for Tile, TileType, TileSet, SetType
+  - Define interfaces for HandPattern, TileRequirement, CardConfig
+  - Define interfaces for GameState, Player, TurnPhase, GameStatus
+  - Define error types and GameError class
+  - _Requirements: 1.1, 3.2, 5.1, 8.1_
+
+- [x] 3. Implement tile engine
+  - [x] 3.1 Create Tile class with properties and methods
+    - Implement tile creation, comparison, and serialization
+    - _Requirements: 1.2, 6.1_
+  - [x] 3.2 Create Wall class for tile management
+    - Implement wall initialization with 144 tiles
+    - Implement shuffle and draw methods
+    - _Requirements: 1.3, 5.1_
+  - [x] 3.3 Create TileSet class for exposed sets
+    - Implement pung, kong, and chow set creation
+    - Implement set validation logic
+    - _Requirements: 5.2, 6.3_
+
+- [x] 4. Implement card configuration system
+  - [x] 4.1 Create CardLoader class
+    - Implement async loading of JSON files from /public/cards/
+    - Implement getAvailableYears method to scan directory
+    - Implement error handling for missing or malformed files
+    - _Requirements: 3.1, 3.5, 2.2_
+  - [x] 4.2 Create card validation logic
+    - Implement JSON schema validation for card configurations
+    - Validate tile requirements and pattern structure
+    - _Requirements: 3.3_
+  - [x] 4.3 Create sample card configuration files
+    - Create 2024.json with sample hand patterns
+    - Create 2025.json with sample hand patterns
+    - Create card-schema.json documenting the format
+    - _Requirements: 3.1, 3.4_
+
+- [x] 5. Implement hand validation system
+  - [x] 5.1 Create HandValidator class
+    - Implement pattern matching algorithm for hand validation
+    - Implement joker substitution logic
+    - Implement scoring calculation
+    - _Requirements: 2.5, 5.4, 7.1_
+  - [x] 5.2 Create RuleEngine class
+    - Implement standard mahjong rules (turn order, calling rules)
+    - Implement validation for pung, kong, and mahjong calls
+    - _Requirements: 4.4, 5.2, 5.3_
+
+- [x] 6. Implement AI player system
+  - [x] 6.1 Create HandEvaluator class
+    - Implement hand analysis to determine proximity to winning patterns
+    - Implement tile usefulness scoring
+    - _Requirements: 4.1, 4.5_
+  - [x] 6.2 Create Strategy class
+    - Implement basic strategy for tile selection
+    - Implement call decision logic (when to pung/kong/mahjong)
+    - _Requirements: 4.3, 4.5_
+  - [x] 6.3 Create AIPlayer class
+    - Implement selectDiscard method using strategy and evaluator
+    - Implement evaluateCall method for call opportunities
+    - Ensure AI decisions complete within 2 seconds
+    - _Requirements: 4.1, 4.2, 4.3, 4.5_
+
+- [x] 7. Implement game engine and state management
+  - [x] 7.1 Create GameEngine class
+    - Implement game initialization and tile dealing
+    - Implement turn processing and advancement
+    - Implement draw and discard logic
+    - _Requirements: 1.3, 5.1, 6.4_
+  - [x] 7.2 Implement call opportunity system
+    - Implement detection of call opportunities after discard
+    - Implement call processing (pung, kong, mahjong)
+    - Implement turn interruption logic
+    - _Requirements: 5.2, 5.3_
+  - [x] 7.3 Implement win condition checking
+    - Integrate HandValidator to check for winning hands
+    - Implement game end logic for wins and draws
+    - Implement wall exhaustion detection
+    - _Requirements: 7.1, 7.2, 7.3, 7.4_
+  - [x] 7.4 Create React state management with Context and useReducer
+    - Define GameAction types and gameReducer function
+    - Create GameContext provider component
+    - Implement state transitions for all game actions
+    - _Requirements: 1.2, 8.5_
+
+- [x] 8. Create UI components
+  - [x] 8.1 Create TileRack component
+    - Display player's tiles in organized rack
+    - Implement tile selection interaction
+    - Display exposed sets separately
+    - _Requirements: 6.1, 6.5_
+  - [x] 8.2 Create DiscardPile component
+    - Display all discarded tiles in center area
+    - Highlight most recent discard
+    - _Requirements: 6.2, 6.5_
+  - [x] 8.3 Create PlayerIndicator component
+    - Display indicators for all four players
+    - Show exposed sets for each player
+    - Highlight active player's turn
+    - _Requirements: 6.3, 6.4_
+  - [x] 8.4 Create CardSelector component
+    - Display dropdown or modal for year selection
+    - Load and display available years from CardLoader
+    - Handle year selection and game reinitialization
+    - _Requirements: 2.1, 2.2, 2.3_
+  - [x] 8.5 Create GameControls component
+    - Implement "New Game" button
+    - Implement call action buttons (Pung, Kong, Mahjong)
+    - Show/hide call buttons based on game state
+    - _Requirements: 5.3, 7.5, 7.6_
+  - [x] 8.6 Create GameBoard component
+    - Compose all child components into main game interface
+    - Handle user interactions and dispatch game actions
+    - Display game status and winner information
+    - _Requirements: 1.1, 1.4, 7.2_
+
+- [x] 9. Implement game flow integration
+  - [x] 9.1 Wire up player turn flow
+    - Connect UI interactions to GameEngine methods
+    - Implement player draw and discard flow
+    - Trigger AI turns after player actions
+    - _Requirements: 1.5, 5.1, 6.4_
+  - [x] 9.2 Implement call opportunity flow
+    - Display call options when available
+    - Process player call selections
+    - Process AI call decisions
+    - _Requirements: 5.2, 5.3_
+  - [x] 9.3 Implement game end flow
+    - Display winning hand and pattern information
+    - Show "New Game" button on game end
+    - Reset game state for new game
+    - _Requirements: 7.2, 7.5, 7.6_
+
+- [x] 10. Add error handling and validation
+  - Implement user-facing error messages for invalid moves
+  - Add error boundaries for React components
+  - Implement graceful fallback for card loading failures
+  - Add validation feedback for invalid hand declarations
+  - _Requirements: 3.5, 7.3_
+
+- [x] 11. Implement local storage for preferences
+  - Create storage utility functions
+  - Save and load selected card year preference
+  - Implement preference persistence across sessions
+  - _Requirements: 2.4, 8.5_
+
+- [x] 12. Add styling and responsive design
+  - Create CSS modules or Tailwind configuration
+  - Style all components for desktop layout
+  - Implement tile visual design
+  - Add animations for tile movements and game transitions
+  - Ensure 60fps performance during animations
+  - _Requirements: 1.1, 6.5, 8.2, 8.3_
+
+- [x] 13. Create documentation
+  - [x] 13.1 Write README.md
+    - Add project overview and features
+    - Add setup and installation instructions
+    - Add usage instructions for playing the game
+    - Add instructions for adding new card configurations
+    - _Requirements: 10.1_
+  - [x] 13.2 Write CONTRIBUTING.md
+    - Add contribution guidelines
+    - Add code style guidelines
+    - Add pull request process
+    - _Requirements: 10.2_
+  - [x] 13.3 Write DEVELOPER.md
+    - Document architecture and design decisions
+    - Document key components and their interactions
+    - Add code examples for extending the system
+    - _Requirements: 10.3_
+  - [x] 13.4 Write CARD_FORMAT.md
+    - Document card configuration JSON format
+    - Provide examples of different pattern types
+    - Document validation rules
+    - _Requirements: 3.4, 10.3_
+  - [x] 13.5 Add inline code documentation
+    - Add JSDoc comments to all public methods
+    - Document complex algorithms and logic
+    - Add type documentation for interfaces
+    - _Requirements: 10.4, 10.5_
+
+- [x] 14. Write tests
+  - [x] 14.1 Write unit tests for tile engine
+    - Test Tile class methods
+    - Test Wall initialization and drawing
+    - Test TileSet validation
+    - _Requirements: 1.2, 5.1_
+  - [x] 14.2 Write unit tests for hand validation
+    - Test pattern matching for various hand types
+    - Test joker substitution logic
+    - Test edge cases
+    - _Requirements: 2.5, 5.4, 7.1_
+  - [x] 14.3 Write unit tests for AI player
+    - Test discard selection logic
+    - Test call decision making
+    - Test strategy evaluation
+    - _Requirements: 4.1, 4.2, 4.3_
+  - [x] 14.4 Write integration tests for game flow
+    - Test complete game from start to win
+    - Test turn progression with AI players
+    - Test call interruptions
+    - _Requirements: 1.3, 1.5, 5.2_

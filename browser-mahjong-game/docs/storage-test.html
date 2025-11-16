@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storage Test - Browser Mahjong</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 3px;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Local Storage Test for Browser Mahjong</h1>
+    <p>This page tests the localStorage functionality for saving user preferences.</p>
+
+    <div class="test-section">
+        <h2>Test 1: Save and Load Selected Year</h2>
+        <button onclick="testSaveYear()">Save Year 2025</button>
+        <button onclick="testLoadYear()">Load Saved Year</button>
+        <button onclick="testClearYear()">Clear Year</button>
+        <div id="yearResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: Save and Load Sound Preference</h2>
+        <button onclick="testSaveSound(true)">Save Sound Enabled</button>
+        <button onclick="testSaveSound(false)">Save Sound Disabled</button>
+        <button onclick="testLoadSound()">Load Sound Preference</button>
+        <div id="soundResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: Save and Load Animation Speed</h2>
+        <button onclick="testSaveSpeed(1.0)">Save Speed 1.0</button>
+        <button onclick="testSaveSpeed(1.5)">Save Speed 1.5</button>
+        <button onclick="testLoadSpeed()">Load Speed</button>
+        <div id="speedResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 4: Get All Preferences</h2>
+        <button onclick="testGetAll()">Get All Preferences</button>
+        <button onclick="testClearAll()">Clear All Preferences</button>
+        <div id="allResult" class="result"></div>
+    </div>
+
+    <script>
+        // Storage utility functions (copied from storage.ts)
+        const STORAGE_KEYS = {
+            SELECTED_YEAR: 'mahjong_selected_year',
+            SOUND_ENABLED: 'mahjong_sound_enabled',
+            ANIMATION_SPEED: 'mahjong_animation_speed',
+        };
+
+        function getSelectedYear() {
+            const stored = localStorage.getItem(STORAGE_KEYS.SELECTED_YEAR);
+            return stored ? parseInt(stored, 10) : null;
+        }
+
+        function saveSelectedYear(year) {
+            localStorage.setItem(STORAGE_KEYS.SELECTED_YEAR, year.toString());
+        }
+
+        function getSoundEnabled() {
+            const stored = localStorage.getItem(STORAGE_KEYS.SOUND_ENABLED);
+            return stored === null ? true : stored === 'true';
+        }
+
+        function saveSoundEnabled(enabled) {
+            localStorage.setItem(STORAGE_KEYS.SOUND_ENABLED, enabled.toString());
+        }
+
+        function getAnimationSpeed() {
+            const stored = localStorage.getItem(STORAGE_KEYS.ANIMATION_SPEED);
+            return stored ? parseFloat(stored) : 1;
+        }
+
+        function saveAnimationSpeed(speed) {
+            localStorage.setItem(STORAGE_KEYS.ANIMATION_SPEED, speed.toString());
+        }
+
+        function getAllPreferences() {
+            return {
+                lastSelectedYear: getSelectedYear(),
+                soundEnabled: getSoundEnabled(),
+                animationSpeed: getAnimationSpeed(),
+            };
+        }
+
+        function clearAllPreferences() {
+            localStorage.removeItem(STORAGE_KEYS.SELECTED_YEAR);
+            localStorage.removeItem(STORAGE_KEYS.SOUND_ENABLED);
+            localStorage.removeItem(STORAGE_KEYS.ANIMATION_SPEED);
+        }
+
+        // Test functions
+        function testSaveYear() {
+            saveSelectedYear(2025);
+            document.getElementById('yearResult').innerHTML = 
+                '<span class="success">✓ Saved year 2025 to localStorage</span>';
+        }
+
+        function testLoadYear() {
+            const year = getSelectedYear();
+            document.getElementById('yearResult').innerHTML = 
+                year !== null 
+                    ? `<span class="success">✓ Loaded year: ${year}</span>`
+                    : '<span class="error">✗ No year saved</span>';
+        }
+
+        function testClearYear() {
+            localStorage.removeItem(STORAGE_KEYS.SELECTED_YEAR);
+            document.getElementById('yearResult').innerHTML = 
+                '<span class="success">✓ Cleared year from localStorage</span>';
+        }
+
+        function testSaveSound(enabled) {
+            saveSoundEnabled(enabled);
+            document.getElementById('soundResult').innerHTML = 
+                `<span class="success">✓ Saved sound enabled: ${enabled}</span>`;
+        }
+
+        function testLoadSound() {
+            const enabled = getSoundEnabled();
+            document.getElementById('soundResult').innerHTML = 
+                `<span class="success">✓ Loaded sound enabled: ${enabled}</span>`;
+        }
+
+        function testSaveSpeed(speed) {
+            saveAnimationSpeed(speed);
+            document.getElementById('speedResult').innerHTML = 
+                `<span class="success">✓ Saved animation speed: ${speed}</span>`;
+        }
+
+        function testLoadSpeed() {
+            const speed = getAnimationSpeed();
+            document.getElementById('speedResult').innerHTML = 
+                `<span class="success">✓ Loaded animation speed: ${speed}</span>`;
+        }
+
+        function testGetAll() {
+            const prefs = getAllPreferences();
+            document.getElementById('allResult').innerHTML = 
+                `<span class="success">✓ All preferences:<br>
+                Year: ${prefs.lastSelectedYear}<br>
+                Sound: ${prefs.soundEnabled}<br>
+                Speed: ${prefs.animationSpeed}</span>`;
+        }
+
+        function testClearAll() {
+            clearAllPreferences();
+            document.getElementById('allResult').innerHTML = 
+                '<span class="success">✓ Cleared all preferences</span>';
+        }
+
+        // Run initial test on load
+        window.onload = function() {
+            const prefs = getAllPreferences();
+            console.log('Current preferences:', prefs);
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,331 @@
+{
+  "year": 2024,
+  "version": "1.0",
+  "patterns": [
+    {
+      "id": "2024_year",
+      "name": "2024",
+      "category": "Year",
+      "points": 25,
+      "tiles": [
+        {
+          "type": "any",
+          "count": 2,
+          "values": [2],
+          "jokerAllowed": true
+        },
+        {
+          "type": "any",
+          "count": 4,
+          "values": [0],
+          "jokerAllowed": true
+        },
+        {
+          "type": "any",
+          "count": 4,
+          "values": [2],
+          "jokerAllowed": true
+        },
+        {
+          "type": "any",
+          "count": 4,
+          "values": [4],
+          "jokerAllowed": true
+        }
+      ]
+    },
+    {
+      "id": "consecutive_run",
+      "name": "Consecutive Run",
+      "category": "Consecutive",
+      "points": 25,
+      "tiles": [
+        {
+          "type": "same_suit",
+          "count": 9,
+          "sequence": true,
+          "values": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+          "jokerAllowed": true
+        },
+        {
+          "type": "dragon",
+          "count": 3,
+          "jokerAllowed": false
+        },
+        {
+          "type": "any",
+          "count": 2,
+          "jokerAllowed": true
+        }
+      ]
+    },
+    {
+      "id": "369_any_suit",
+      "name": "369 Any Suit",
+      "category": "369",
+      "points": 25,
+      "tiles": [
+        {
+          "type": "any",
+          "count": 3,
+          "values": [3],
+          "jokerAllowed": true
+        },
+        {
+          "type": "any",
+          "count": 3,
+          "values": [6],
+          "jokerAllowed": true
+        },
+        {
+          "type": "any",
+          "count": 3,
+          "values": [9],
+          "jokerAllowed": true
+        },
+        {
+          "type": "any",
+          "count": 3,
+          "values": [3],
+          "jokerAllowed": true
+        },
+        {
+          "type": "any",
+          "count": 2,
+          "jokerAllowed": true
+        }
+      ]
+    },
+    {
+      "id": "winds_dragons",
+      "name": "Winds and Dragons",
+      "category": "Winds-Dragons",
+      "points": 25,
+      "tiles": [
+        {
+          "type": "wind",
+          "count": 3,
+          "jokerAllowed": false
+        },
+        {
+          "type": "wind",
+          "count": 3,
+          "jokerAllowed": false
+        },
+        {
+          "type": "dragon",
+          "count": 3,
+          "jokerAllowed": false
+        },
+        {
+          "type": "dragon",
+          "count": 3,
+          "jokerAllowed": false
+        },
+        {
+          "type": "any",
+          "count": 2,
+          "jokerAllowed": true
+        }
+      ]
+    },
+    {
+      "id": "singles_pairs",
+      "name": "Singles and Pairs",
+      "category": "Singles-Pairs",
+      "points": 25,
+      "tiles": [
+        {
+          "type": "any",
+          "count": 2,
+          "jokerAllowed": false
+        },
+        {
+          "type": "any",
+          "count": 2,
+          "jokerAllowed": false
+        },
+        {
+          "type": "any",
+          "count": 2,
+          "jokerAllowed": false
+        },
+        {
+          "type": "any",
+          "count": 2,
+          "jokerAllowed": false
+        },
+        {
+          "type": "any",
+          "count": 2,
+          "jokerAllowed": false
+        },
+        {
+          "type": "any",
+          "count": 2,
+          "jokerAllowed": false
+        },
+        {
+          "type": "any",
+          "count": 2,
+          "jokerAllowed": false
+        }
+      ]
+    },
+    {
+      "id": "like_numbers",
+      "name": "Like Numbers",
+      "category": "Like Numbers",
+      "points": 30,
+      "tiles": [
+        {
+          "type": "bamboo",
+          "count": 3,
+          "values": [1],
+          "jokerAllowed": true
+        },
+        {
+          "type": "character",
+          "count": 3,
+          "values": [1],
+          "jokerAllowed": true
+        },
+        {
+          "type": "dot",
+          "count": 3,
+          "values": [1],
+          "jokerAllowed": true
+        },
+        {
+          "type": "any",
+          "count": 3,
+          "jokerAllowed": true
+        },
+        {
+          "type": "any",
+          "count": 2,
+          "jokerAllowed": true
+        }
+      ]
+    },
+    {
+      "id": "quints",
+      "name": "Quints",
+      "category": "Quints",
+      "points": 30,
+      "tiles": [
+        {
+          "type": "any",
+          "count": 5,
+          "jokerAllowed": true
+        },
+        {
+          "type": "any",
+          "count": 5,
+          "jokerAllowed": true
+        },
+        {
+          "type": "any",
+          "count": 2,
+          "jokerAllowed": true
+        },
+        {
+          "type": "any",
+          "count": 2,
+          "jokerAllowed": true
+        }
+      ]
+    },
+    {
+      "id": "thirteen_wonders",
+      "name": "Thirteen Wonders",
+      "category": "Special",
+      "points": 50,
+      "tiles": [
+        {
+          "type": "bamboo",
+          "count": 1,
+          "values": [1],
+          "jokerAllowed": false
+        },
+        {
+          "type": "bamboo",
+          "count": 1,
+          "values": [9],
+          "jokerAllowed": false
+        },
+        {
+          "type": "character",
+          "count": 1,
+          "values": [1],
+          "jokerAllowed": false
+        },
+        {
+          "type": "character",
+          "count": 1,
+          "values": [9],
+          "jokerAllowed": false
+        },
+        {
+          "type": "dot",
+          "count": 1,
+          "values": [1],
+          "jokerAllowed": false
+        },
+        {
+          "type": "dot",
+          "count": 1,
+          "values": [9],
+          "jokerAllowed": false
+        },
+        {
+          "type": "wind",
+          "count": 1,
+          "values": ["east"],
+          "jokerAllowed": false
+        },
+        {
+          "type": "wind",
+          "count": 1,
+          "values": ["south"],
+          "jokerAllowed": false
+        },
+        {
+          "type": "wind",
+          "count": 1,
+          "values": ["west"],
+          "jokerAllowed": false
+        },
+        {
+          "type": "wind",
+          "count": 1,
+          "values": ["north"],
+          "jokerAllowed": false
+        },
+        {
+          "type": "dragon",
+          "count": 1,
+          "values": ["red"],
+          "jokerAllowed": false
+        },
+        {
+          "type": "dragon",
+          "count": 1,
+          "values": ["green"],
+          "jokerAllowed": false
+        },
+        {
+          "type": "dragon",
+          "count": 1,
+          "values": ["white"],
+          "jokerAllowed": false
+        },
+        {
+          "type": "any",
+          "count": 1,
+          "jokerAllowed": false
+        }
+      ]
+    }
+  ]
+}

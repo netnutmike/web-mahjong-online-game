@@ -1,0 +1,208 @@
+.player-indicator {
+  background-color: var(--color-bg-medium, #2a2a2a);
+  border: 2px solid var(--color-bg-light, #404040);
+  border-radius: 8px;
+  padding: 1rem;
+  transition: border-color var(--transition-normal, 0.25s) ease-out,
+              background-color var(--transition-normal, 0.25s) ease-out,
+              box-shadow var(--transition-normal, 0.25s) ease-out,
+              transform var(--transition-normal, 0.25s) ease-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  /* Enable hardware acceleration */
+  will-change: transform, box-shadow;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.player-indicator-active {
+  border-color: var(--color-primary, #4a90e2);
+  background-color: #1e3a5f;
+  box-shadow: 0 0 16px rgba(74, 144, 226, 0.5),
+              0 0 0 3px rgba(74, 144, 226, 0.2);
+  transform: scale(1.02) translateZ(0);
+  animation: activePulse 2s ease-in-out infinite;
+}
+
+@keyframes activePulse {
+  0%, 100% {
+    box-shadow: 0 0 16px rgba(74, 144, 226, 0.5),
+                0 0 0 3px rgba(74, 144, 226, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(74, 144, 226, 0.7),
+                0 0 0 4px rgba(74, 144, 226, 0.3);
+  }
+}
+
+/* Position-specific styling */
+.player-indicator-top,
+.player-indicator-bottom {
+  min-width: 200px;
+}
+
+.player-indicator-left,
+.player-indicator-right {
+  min-width: 150px;
+}
+
+/* Player Info Section */
+.player-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.player-label {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #e0e0e0;
+}
+
+.player-tile-count {
+  font-size: 0.875rem;
+  color: #a0a0a0;
+}
+
+.player-turn-indicator {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #4a90e2;
+  margin-top: 0.25rem;
+  animation: blink 1.5s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Exposed Sets Section */
+.player-exposed-sets {
+  border-top: 1px solid #404040;
+  padding-top: 0.75rem;
+}
+
+.exposed-sets-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #a0a0a0;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.exposed-sets-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.player-set {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  background: linear-gradient(135deg, var(--color-bg-dark, #1a1a1a) 0%, #1f1f1f 100%);
+  border-radius: 4px;
+  border-left: 3px solid var(--color-bg-light, #404040);
+  transition: transform var(--transition-fast, 0.15s) ease-out,
+              box-shadow var(--transition-fast, 0.15s) ease-out;
+  /* Enable hardware acceleration */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  animation: setSlideIn 0.3s ease-out;
+}
+
+@keyframes setSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px) translateZ(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) translateZ(0);
+  }
+}
+
+.player-set-pung {
+  border-left-color: var(--color-primary, #4a90e2);
+  box-shadow: -2px 0 8px rgba(74, 144, 226, 0.2);
+}
+
+.player-set-kong {
+  border-left-color: #e24a4a;
+  box-shadow: -2px 0 8px rgba(226, 74, 74, 0.2);
+}
+
+.player-set-chow {
+  border-left-color: #4ae290;
+  box-shadow: -2px 0 8px rgba(74, 226, 144, 0.2);
+}
+
+.set-type-badge {
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: #a0a0a0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.set-tiles {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.set-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 45px;
+  background-color: #f5f5f5;
+  border: 1px solid #666;
+  border-radius: 3px;
+  padding: 0.125rem;
+}
+
+.set-tile-type {
+  font-size: 0.5rem;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+}
+
+.set-tile-value {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #333;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .player-indicator {
+    padding: 0.75rem;
+  }
+
+  .player-label {
+    font-size: 0.875rem;
+  }
+
+  .player-tile-count {
+    font-size: 0.75rem;
+  }
+
+  .set-tile {
+    width: 30px;
+    height: 40px;
+  }
+
+  .set-tile-value {
+    font-size: 0.75rem;
+  }
+}
