@@ -63,7 +63,10 @@ export function GameProvider({ children, initialCardConfig }: GameProviderProps)
   // Helper function to process call opportunities after a discard
   React.useEffect(() => {
     processCallOpportunitiesRef.current = async () => {
+      console.log('processCallOpportunities called. Phase:', engine.getState().turnPhase, 'hasCallOpportunities:', engine.hasCallOpportunities());
+      
       if (!engine.hasCallOpportunities()) {
+        console.log('No call opportunities, returning');
         return;
       }
 
