@@ -124,6 +124,7 @@ export class GameEngine {
    * Handles both human and AI players
    */
   async processTurn(): Promise<void> {
+    console.log('processTurn called. Current player:', this.state.currentPlayer, 'Phase:', this.state.turnPhase);
     const player = this.getCurrentPlayer();
 
     if (!player) {
@@ -133,8 +134,11 @@ export class GameEngine {
       );
     }
 
+    console.log('Player found:', player.id, 'isHuman:', player.isHuman);
+
     // Check if game is over
     if (this.state.gameStatus !== GameStatus.IN_PROGRESS) {
+      console.log('Game is not in progress, returning');
       return;
     }
 
@@ -143,11 +147,16 @@ export class GameEngine {
       // Draw phase - player needs to draw a tile
       if (player.isHuman) {
         // Human player - wait for UI to trigger draw
+        console.log('Human player turn, waiting for UI');
         return;
       } else {
         // AI player - automatically draw
+        console.log('AI player turn, processing...');
         await this.processAITurn(player);
+        console.log('AI turn complete');
       }
+    } else {
+      console.log('Not in DRAW phase, current phase:', this.state.turnPhase);
     }
   }
 
