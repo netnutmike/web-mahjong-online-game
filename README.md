@@ -32,7 +32,7 @@ A browser-based American Mahjong practice game where you can play against three 
 1. Clone the repository:
 ```bash
 git clone <repository-url>
-cd browser-mahjong-game
+cd web-mahjong-online-game/browser-mahjong-game
 ```
 
 2. Install dependencies:
@@ -99,12 +99,12 @@ Call buttons will appear automatically when you have a valid call opportunity.
 
 ## Adding New Card Configurations
 
-You can add new yearly card configurations by creating JSON files in the `browser-mahjong-game/public/cards/` directory.
+You can add new yearly card configurations by creating JSON files in the `public/cards/` directory.
 
 ### Creating a Card Configuration File
 
-1. Create a new file named `YYYY.json` (e.g., `2026.json`) in `browser-mahjong-game/public/cards/`
-2. Follow the card configuration format (see `browser-mahjong-game/docs/CARD_FORMAT.md` for details)
+1. Create a new file named `YYYY.json` (e.g., `2026.json`) in `public/cards/`
+2. Follow the card configuration format (see `docs/CARD_FORMAT.md` for details)
 3. The new year will automatically appear in the card selector
 
 ### Basic Card Format
@@ -138,8 +138,8 @@ You can add new yearly card configurations by creating JSON files in the `browse
 - Each pattern must have a unique ID
 - Tile requirements must specify type, count, and whether jokers are allowed
 - Patterns can include sequences (consecutive tiles) or sets (matching tiles)
-- See `browser-mahjong-game/public/cards/card-schema.json` for the complete schema
-- Refer to `browser-mahjong-game/docs/CARD_FORMAT.md` for detailed documentation and examples
+- See `public/cards/card-schema.json` for the complete schema
+- Refer to `docs/CARD_FORMAT.md` for detailed documentation and examples
 
 ### Validating Your Configuration
 
@@ -168,23 +168,21 @@ browser-mahjong-game/
 
 ## Documentation
 
-- **browser-mahjong-game/CONTRIBUTING.md**: Guidelines for contributing to the project
-- **browser-mahjong-game/docs/DEVELOPER.md**: Architecture and development guide
-- **browser-mahjong-game/docs/CARD_FORMAT.md**: Detailed card configuration format documentation
+- **CONTRIBUTING.md**: Guidelines for contributing to the project
+- **docs/DEVELOPER.md**: Architecture and development guide
+- **docs/CARD_FORMAT.md**: Detailed card configuration format documentation
 
 ## Development
 
 ### Running Tests
 
 ```bash
-cd browser-mahjong-game
 npm test
 ```
 
 ### Linting
 
 ```bash
-cd browser-mahjong-game
 npm run lint
 ```
 
@@ -194,11 +192,11 @@ This project uses ESLint with TypeScript rules. Please ensure your code passes l
 
 ## License
 
-This project is licensed under the GNU General Public License v3.0 (GPL-3.0). See the [LICENSE](browser-mahjong-game/LICENSE) file for details.
+This project is licensed under the GNU General Public License v3.0 (GPL-3.0). See the [LICENSE](LICENSE) file for details.
 
 ## Contributing
 
-Contributions are welcome! Please read [CONTRIBUTING.md](browser-mahjong-game/CONTRIBUTING.md) for guidelines on how to contribute to this project.
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to contribute to this project.
 
 ## Support
 
