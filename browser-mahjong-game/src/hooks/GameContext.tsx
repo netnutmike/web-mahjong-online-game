@@ -141,7 +141,10 @@ export function GameProvider({ children, initialCardConfig }: GameProviderProps)
                         try {
                           console.log('Processing next turn after decline');
                           await engine.processTurn();
-                          dispatch({ type: GameActionType.UPDATE_STATE, payload: { state: engine.getState() } });
+                          const newState = engine.getState();
+                          console.log('Dispatching state update. New current player:', newState.currentPlayer, 'Phase:', newState.turnPhase);
+                          dispatch({ type: GameActionType.UPDATE_STATE, payload: { state: newState } });
+                          console.log('State update dispatched');
                         } catch (err) {
                           console.error('Error processing next turn:', err);
                         }
