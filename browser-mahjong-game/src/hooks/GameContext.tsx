@@ -75,7 +75,9 @@ export function GameProvider({ children, initialCardConfig }: GameProviderProps)
       console.log('Call opportunities found:', opportunities.length);
 
       try {
+        console.log('Calling processAICallDecisions...');
         const aiCall = await engine.processAICallDecisions(opportunities);
+        console.log('processAICallDecisions returned:', aiCall);
 
         if (aiCall) {
           // AI wants to call

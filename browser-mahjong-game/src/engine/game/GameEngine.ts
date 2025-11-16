@@ -612,11 +612,15 @@ export class GameEngine {
    * @returns The winning opportunity if an AI decides to call, or null
    */
   async processAICallDecisions(opportunities: CallOpportunity[]): Promise<CallOpportunity | null> {
+    console.log('processAICallDecisions: Total opportunities:', opportunities.length);
+    
     // Filter for AI player opportunities
     const aiOpportunities = opportunities.filter(opp => {
       const player = this.getPlayer(opp.playerId);
       return player && !player.isHuman;
     });
+
+    console.log('processAICallDecisions: AI opportunities:', aiOpportunities.length);
 
     if (aiOpportunities.length === 0) {
       return null;
@@ -636,16 +640,20 @@ export class GameEngine {
     const aiPlayer = this.aiPlayers.find(ai => ai.getPlayerId() === priorityCall.playerId);
     const player = this.getPlayer(priorityCall.playerId);
 
+    console.log('processAICallDecisions: Priority call for player:', priorityCall.playerId, 'aiPlayer found:', !!aiPlayer, 'player found:', !!player);
+
     if (!aiPlayer || !player) {
       return null;
     }
 
     // Ask AI if it wants to make the call
+    console.log('processAICallDecisions: Asking AI for decision...');
     const decision = await aiPlayer.makeCallDecision(
       priorityCall,
       player.hand,
       player.exposedSets
     );
+    console.log('processAICallDecisions: AI decision:', decision);
 
     if (decision.shouldCall) {
       return priorityCall;
