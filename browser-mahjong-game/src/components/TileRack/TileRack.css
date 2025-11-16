@@ -106,8 +106,8 @@
 .tile {
   width: 65px;
   height: 85px;
-  background: linear-gradient(145deg, #ffffff 0%, #f5f5f5 100%);
-  border: 2px solid #333;
+  background: linear-gradient(145deg, #2d3748 0%, #1a202c 100%);
+  border: 2px solid #4a5568;
   border-radius: 6px;
   display: flex;
   align-items: center;
@@ -117,8 +117,8 @@
               box-shadow var(--transition-fast, 0.15s) ease-out,
               border-color var(--transition-fast, 0.15s) ease-out,
               background var(--transition-fast, 0.15s) ease-out;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2),
-              inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
   position: relative;
   /* Enable hardware acceleration */
   will-change: transform;
@@ -132,20 +132,20 @@
 
 .tile-clickable:hover {
   transform: translateY(-4px) translateZ(0);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3),
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5),
               0 0 0 2px var(--color-primary, #4a90e2),
-              inset 0 1px 0 rgba(255, 255, 255, 0.5);
+              inset 0 1px 0 rgba(255, 255, 255, 0.15);
   border-color: var(--color-primary, #4a90e2);
-  background: linear-gradient(145deg, #ffffff 0%, #e3f2fd 100%);
+  background: linear-gradient(145deg, #3d4f66 0%, #2d3e52 100%);
 }
 
 .tile-selected {
   transform: translateY(-8px) translateZ(0);
   border-color: var(--color-primary, #4a90e2);
-  background: linear-gradient(145deg, #e3f2fd 0%, #bbdefb 100%);
-  box-shadow: 0 6px 12px rgba(74, 144, 226, 0.4),
+  background: linear-gradient(145deg, #4a90e2 0%, #357abd 100%);
+  box-shadow: 0 6px 12px rgba(74, 144, 226, 0.6),
               0 0 0 3px var(--color-primary, #4a90e2),
-              inset 0 1px 0 rgba(255, 255, 255, 0.7);
+              inset 0 1px 0 rgba(255, 255, 255, 0.2);
   animation: tileSelect 0.2s ease-out;
 }
 
@@ -168,10 +168,11 @@
 }
 
 .tile-exposed {
-  background: linear-gradient(145deg, #e0e0e0 0%, #d0d0d0 100%);
-  border-color: #666;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2),
-              inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  background: linear-gradient(145deg, #4a5568 0%, #2d3748 100%);
+  border-color: #718096;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  opacity: 0.85;
 }
 
 .tile-content {
@@ -192,17 +193,17 @@
 .tile-type {
   font-size: 0.7rem;
   font-weight: 700;
-  color: #555;
+  color: #a0aec0;
   text-transform: uppercase;
-  text-shadow: none;
-  letter-spacing: 0.02em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  letter-spacing: 0.05em;
 }
 
 .tile-value {
   font-size: 1.5rem;
   font-weight: 800;
-  color: #000;
-  text-shadow: none;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   /* Prevent text from being blurry during animations */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
