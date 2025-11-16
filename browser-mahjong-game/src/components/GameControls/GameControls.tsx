@@ -61,11 +61,9 @@ export const GameControls: React.FC<GameControlsProps> = ({
       )}
 
       {/* Call Action Buttons */}
-      {showCallButtons && (
+      {showCallButtons && hasHumanOpportunities && (
         <div className="game-controls-section">
-          <div className="call-buttons-label">
-            {hasHumanOpportunities ? 'Call Actions Available:' : 'Waiting for AI decisions...'}
-          </div>
+          <div className="call-buttons-label">Call Actions Available:</div>
           <div className="call-buttons">
             {canCallMahjong && (
               <button
@@ -96,7 +94,7 @@ export const GameControls: React.FC<GameControlsProps> = ({
                 className="game-control-button call-button call-button-decline"
                 onClick={onDeclineCall}
               >
-                {hasHumanOpportunities ? 'Pass' : 'Continue Game'}
+                Pass
               </button>
             )}
           </div>
