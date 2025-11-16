@@ -104,42 +104,69 @@ export function GameProvider({ children, initialCardConfig }: GameProviderProps)
               
               // Give UI time to update before processing AI decisions
               setTimeout(async () => {
-                const aiCall = await engine.processAICallDecisions(opportunities);
+                try {
+                  const aiCall = await engine.processAICallDecisions(opportunities);
 
-                if (aiCall) {
-                  // AI wants to call
-                  engine.processCall(aiCall.playerId, aiCall.callType, aiCall.tile);
-                  dispatch({ type: GameActionType.UPDATE_STATE, payload: { state: engine.getState() } });
-
-                  // If not mahjong, AI needs to discard
-                  if (aiCall.callType !== CallType.MAHJONG) {
-                    setTimeout(async () => {
-                      await engine.processTurn();
-                      dispatch({ type: GameActionType.UPDATE_STATE, payload: { state: engine.getState() } });
-                    }, 500);
-                  }
-                } else {
-                  // No AI calls, check if human has opportunities
-                  const humanOpportunities = engine.getHumanCallOpportunities();
-                  if (humanOpportunities.length === 0) {
-                    // No one wants to call, advance turn
-                    engine.declineCallOpportunities();
+                  if (aiCall) {
+                    // AI wants to call
+                    engine.processCall(aiCall.playerId, aiCall.callType, aiCall.tile);
                     dispatch({ type: GameActionType.UPDATE_STATE, payload: { state: engine.getState() } });
 
-                    // Process next turn if it's an AI
+                    // If not mahjong, AI needs to discard
+                    if (aiCall.callType !== CallType.MAHJONG) {
+                      setTimeout(async () => {
+                        try {
+                          await engine.processTurn();
+                          dispatch({ type: GameActionType.UPDATE_STATE, payload: { state: engine.getState() } });
+                        } catch (err) {
+                          console.error('Error processing AI turn after call:', err);
+                        }
+                      }, 500);
+                    }
+                  } else {
+                    // No AI calls, check if human has opportunities
+                    const humanOpportunities = engine.getHumanCallOpportunities();
+                    if (humanOpportunities.length === 0) {
+                      // No one wants to call, advance turn
+                      engine.declineCallOpportunities();
+                      dispatch({ type: GameActionType.UPDATE_STATE, payload: { state: engine.getState() } });
+
+                      // Process next turn if it's an AI
+                      setTimeout(async () => {
+                        try {
+                          await engine.processTurn();
+                          dispatch({ type: GameActionType.UPDATE_STATE, payload: { state: engine.getState() } });
+                        } catch (err) {
+                          console.error('Error processing next turn:', err);
+                        }
+                      }, 500);
+                    }
+                    // If human has opportunities, UI will show them
+                  }
+                } catch (err) {
+                  console.error('Error processing AI call decisions:', err);
+                  // Fallback: decline and advance
+                  try {
+                    engine.declineCallOpportunities();
+                    dispatch({ type: GameActionType.UPDATE_STATE, payload: { state: engine.getState() } });
                     setTimeout(async () => {
                       await engine.processTurn();
                       dispatch({ type: GameActionType.UPDATE_STATE, payload: { state: engine.getState() } });
                     }, 500);
+                  } catch (fallbackErr) {
+                    console.error('Error in fallback:', fallbackErr);
                   }
-                  // If human has opportunities, UI will show them
                 }
               }, 300);
             } else {
               // No call opportunities, process next turn
               setTimeout(async () => {
-                await engine.processTurn();
-                dispatch({ type: GameActionType.UPDATE_STATE, payload: { state: engine.getState() } });
+                try {
+                  await engine.processTurn();
+                  dispatch({ type: GameActionType.UPDATE_STATE, payload: { state: engine.getState() } });
+                } catch (err) {
+                  console.error('Error processing next turn:', err);
+                }
               }, 500);
             }
             break;

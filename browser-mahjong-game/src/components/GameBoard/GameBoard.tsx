@@ -191,6 +191,15 @@ export const GameBoard: React.FC = () => {
       {/* Header Section */}
       <div className="game-board-header">
         <h1 className="game-title">American Mahjong</h1>
+        <div className="turn-indicator">
+          <span className="turn-label">Current Turn:</span>
+          <span className={`turn-player ${isHumanTurn ? 'turn-player-human' : 'turn-player-ai'}`}>
+            {isHumanTurn ? 'Your Turn' : `AI Player ${state.currentPlayer}`}
+          </span>
+          {state.turnPhase && (
+            <span className="turn-phase">({state.turnPhase})</span>
+          )}
+        </div>
         <CardSelector
           selectedYear={state.selectedCardYear}
           onYearSelect={handleYearSelect}
