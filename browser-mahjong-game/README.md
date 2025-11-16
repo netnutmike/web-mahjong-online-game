@@ -198,6 +198,34 @@ This project is licensed under the GNU General Public License v3.0 (GPL-3.0). Se
 
 Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to contribute to this project.
 
+## Future Enhancements
+
+The following features are planned for future releases:
+
+### The Charleston
+
+The Charleston is a traditional tile-passing phase in American Mahjong that occurs before gameplay begins. Implementation will include:
+
+- **First Charleston**: Players pass 3 tiles right, 3 tiles across, 3 tiles left
+- **Optional Second Charleston**: Players can agree to do another round of passing
+- **Courtesy Pass**: Optional final pass of 1-3 tiles across
+- **AI Strategy**: Smart tile selection for AI players during Charleston
+- **UI Controls**: Intuitive tile selection and passing interface
+- **Game Settings**: Option to enable/disable Charleston
+
+This feature will be added in a future update to provide a more authentic American Mahjong experience.
+
+### Other Planned Features
+
+- **Multiplayer Support**: Play with friends online
+- **Game Statistics**: Track wins, patterns completed, and performance
+- **Hints System**: Optional hints for beginners
+- **Undo/Redo**: Ability to review and undo moves (practice mode)
+- **Sound Effects**: Audio feedback for game actions
+- **Animations**: Enhanced tile movement animations
+- **Mobile Optimization**: Improved touch controls for mobile devices
+- **Tutorial Mode**: Interactive tutorial for new players
+
 ## Support
 
 For issues, questions, or suggestions, please open an issue on the project repository.
