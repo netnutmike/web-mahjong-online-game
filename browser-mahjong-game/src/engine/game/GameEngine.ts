@@ -19,13 +19,16 @@ export class GameEngine {
   private handValidator: HandValidator;
   private ruleEngine: RuleEngine;
   private aiPlayers: AIPlayer[];
+  private difficulty: Difficulty;
 
   /**
    * Creates a new GameEngine instance
    * @param cardConfig - The card configuration for this game
+   * @param difficulty - AI difficulty level (default: MEDIUM)
    */
-  constructor(cardConfig: CardConfig) {
+  constructor(cardConfig: CardConfig, difficulty: Difficulty = Difficulty.MEDIUM) {
     this.cardConfig = cardConfig;
+    this.difficulty = difficulty;
     this.wall = new Wall();
     this.handValidator = new HandValidator(cardConfig);
     this.ruleEngine = new RuleEngine();
@@ -77,11 +80,11 @@ export class GameEngine {
       { id: 3, isHuman: false, hand: [], exposedSets: [], discardedTiles: [] }
     ];
 
-    // Initialize AI players
+    // Initialize AI players with current difficulty
     this.aiPlayers = [
-      new AIPlayer(1, this.cardConfig, Difficulty.MEDIUM),
-      new AIPlayer(2, this.cardConfig, Difficulty.MEDIUM),
-      new AIPlayer(3, this.cardConfig, Difficulty.MEDIUM)
+      new AIPlayer(1, this.cardConfig, this.difficulty),
+      new AIPlayer(2, this.cardConfig, this.difficulty),
+      new AIPlayer(3, this.cardConfig, this.difficulty)
     ];
 
     // Deal tiles
@@ -532,6 +535,27 @@ export class GameEngine {
    */
   getCardConfig(): CardConfig {
     return this.cardConfig;
+  }
+
+  /**
+   * Updates the AI difficulty level
+   * @param difficulty - New difficulty level
+   */
+  updateDifficulty(difficulty: Difficulty): void {
+    this.difficulty = difficulty;
+    
+    // Update existing AI players
+    for (const aiPlayer of this.aiPlayers) {
+      aiPlayer.updateDifficulty(difficulty);
+    }
+  }
+
+  /**
+   * Gets the current difficulty level
+   * @returns Current difficulty
+   */
+  getDifficulty(): Difficulty {
+    return this.difficulty;
   }
 
   /**

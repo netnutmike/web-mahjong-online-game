@@ -167,8 +167,12 @@ export class Strategy {
     if (kongBest && currentBest) {
       const improvesPosition = kongBest.tilesNeeded <= currentBest.tilesNeeded;
       
-      // Apply difficulty-based decision making
-      const shouldCall = this.applyDifficultyDecision(improvesPosition);
+      // For medium/hard difficulty, always call if it improves
+      // For easy difficulty, add some randomness
+      let shouldCall = improvesPosition;
+      if (this.difficulty === Difficulty.EASY && improvesPosition) {
+        shouldCall = Math.random() > 0.3; // 70% chance to call
+      }
 
       return {
         shouldCall,
@@ -212,13 +216,17 @@ export class Strategy {
     const currentBest = currentEval[0];
     const pungBest = pungEval[0];
 
-    // Call pung if it significantly improves proximity to winning
+    // Call pung if it improves or maintains proximity to winning
     if (pungBest && currentBest) {
-      // Only call pung if it reduces tiles needed
-      const improvesPosition = pungBest.tilesNeeded < currentBest.tilesNeeded;
+      // Call pung if it reduces tiles needed or keeps it the same (more aggressive)
+      const improvesPosition = pungBest.tilesNeeded <= currentBest.tilesNeeded;
       
-      // Apply difficulty-based decision making
-      const shouldCall = this.applyDifficultyDecision(improvesPosition);
+      // For medium/hard difficulty, always call if it improves
+      // For easy difficulty, add some randomness
+      let shouldCall = improvesPosition;
+      if (this.difficulty === Difficulty.EASY && improvesPosition) {
+        shouldCall = Math.random() > 0.3; // 70% chance to call
+      }
 
       return {
         shouldCall,
@@ -332,6 +340,14 @@ export class Strategy {
    * @param difficulty - New difficulty level
    */
   setDifficulty(difficulty: Difficulty): void {
+    this.difficulty = difficulty;
+  }
+
+  /**
+   * Updates the difficulty level
+   * @param difficulty - New difficulty level
+   */
+  updateDifficulty(difficulty: Difficulty): void {
     this.difficulty = difficulty;
   }
 }

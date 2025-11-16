@@ -5,6 +5,7 @@ import { TileRack } from '../TileRack';
 import { DiscardPile } from '../DiscardPile';
 import { PlayerIndicator } from '../PlayerIndicator';
 import { CardSelector } from '../CardSelector';
+import { DifficultySelector } from '../DifficultySelector';
 import { GameControls } from '../GameControls';
 import { WinnerDisplay } from '../WinnerDisplay';
 import { DrawDisplay } from '../DrawDisplay';
@@ -12,6 +13,7 @@ import { ErrorMessage } from '../ErrorMessage';
 import { cardLoader } from '../../config/CardLoader';
 import { saveSelectedYear } from '../../utils/storage';
 import { GameStatus, TurnPhase, CallType } from '../../types';
+import { Difficulty } from '../../engine/ai/Strategy';
 import type { Tile } from '../../types';
 import './GameBoard.css';
 
@@ -141,6 +143,18 @@ export const GameBoard: React.FC = () => {
     }
   };
 
+  // Handle difficulty selection
+  const handleDifficultySelect = (difficulty: Difficulty) => {
+    if (engine) {
+      engine.updateDifficulty(difficulty);
+      // Force a re-render to update the UI
+      dispatch({
+        type: GameActionType.UPDATE_STATE,
+        payload: { state: engine.getState() }
+      });
+    }
+  };
+
   // Auto-draw tile when it's human player's turn and phase is DRAW
   useEffect(() => {
     if (isHumanTurn && state.turnPhase === TurnPhase.DRAW && state.gameStatus === GameStatus.IN_PROGRESS) {
@@ -210,10 +224,16 @@ export const GameBoard: React.FC = () => {
             <span className="turn-phase">({state.turnPhase})</span>
           )}
         </div>
-        <CardSelector
-          selectedYear={state.selectedCardYear}
-          onYearSelect={handleYearSelect}
-        />
+        <div className="game-settings">
+          <CardSelector
+            selectedYear={state.selectedCardYear}
+            onYearSelect={handleYearSelect}
+          />
+          <DifficultySelector
+            selectedDifficulty={engine?.getDifficulty() || Difficulty.MEDIUM}
+            onDifficultySelect={handleDifficultySelect}
+          />
+        </div>
       </div>
 
       {/* Error Display */}

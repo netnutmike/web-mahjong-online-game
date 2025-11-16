@@ -118,13 +118,21 @@ export function GameProvider({ children, initialCardConfig }: GameProviderProps)
           if (aiCall.callType !== CallType.MAHJONG) {
             setTimeout(async () => {
               try {
-                await engine.processTurn();
-                dispatch({ type: GameActionType.UPDATE_STATE, payload: { state: engine.getState() } });
+                // AI is now in discard phase, need to make discard decision
+                const aiPlayer = engine.getAIPlayers().find(ai => ai.getPlayerId() === aiCall.playerId);
+                const player = engine.getPlayer(aiCall.playerId);
                 
-                // Recursively process any new call opportunities
-                setTimeout(() => processCallOpportunitiesRef.current?.(), 300);
+                if (aiPlayer && player) {
+                  // AI decides which tile to discard
+                  const tileToDiscard = await aiPlayer.makeTurnDecision(player.hand, player.exposedSets);
+                  engine.discardTile(aiCall.playerId, tileToDiscard);
+                  dispatch({ type: GameActionType.UPDATE_STATE, payload: { state: engine.getState() } });
+                  
+                  // Continue game flow after discard
+                  setTimeout(() => continueGameFlowRef.current?.(), 300);
+                }
               } catch (err) {
-                console.error('Error processing AI turn after call:', err);
+                console.error('Error processing AI discard after call:', err);
               }
             }, 500);
           }

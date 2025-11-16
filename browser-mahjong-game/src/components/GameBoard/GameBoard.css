@@ -30,9 +30,8 @@
   background: linear-gradient(135deg, var(--color-bg-medium, #2a2a2a) 0%, #252525 100%);
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-  /* Enable hardware acceleration */
-  transform: translateZ(0);
-  backface-visibility: hidden;
+  position: relative;
+  /* Removed transform to allow dropdowns to escape stacking context */
 }
 
 .game-title {
@@ -205,9 +204,9 @@
   background: linear-gradient(135deg, var(--color-bg-medium, #2a2a2a) 0%, #252525 100%);
   border-radius: 6px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  /* Enable hardware acceleration */
-  transform: translateZ(0);
-  backface-visibility: hidden;
+  position: relative;
+  z-index: 50;
+  /* Removed transform to allow dropdowns to escape stacking context */
 }
 
 .game-info-item {
@@ -227,6 +226,16 @@
   font-weight: 700;
   color: var(--color-text-primary, #e0e0e0);
   transition: color var(--transition-fast, 0.15s) ease-out;
+}
+
+/* Game Settings */
+.game-settings {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 9999;
 }
 
 /* Bottom Player Area */

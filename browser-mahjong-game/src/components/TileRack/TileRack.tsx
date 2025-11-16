@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Tile, TileSet } from '../../types';
+import { getTileUnicode, getTileTypeAbbreviation } from '../../utils/tileDisplay';
 import './TileRack.css';
 
 interface TileRackProps {
@@ -11,22 +12,6 @@ interface TileRackProps {
 }
 
 type SortMode = 'suit-value' | 'value';
-
-/**
- * Get abbreviated tile type for display
- */
-const getTileTypeAbbreviation = (type: string): string => {
-  const abbreviations: Record<string, string> = {
-    'bamboo': 'BAM',
-    'character': 'CRAK',
-    'dot': 'DOT',
-    'wind': 'WIND',
-    'dragon': 'DRAG',
-    'flower': 'FLWR',
-    'joker': 'JOKR'
-  };
-  return abbreviations[type.toLowerCase()] || type.toUpperCase().substring(0, 4);
-};
 
 /**
  * TileRack component displays the player's tiles in an organized rack
@@ -113,8 +98,11 @@ export const TileRack: React.FC<TileRackProps> = ({
                     className="tile tile-exposed"
                   >
                     <div className="tile-content">
-                      <span className="tile-type">{getTileTypeAbbreviation(tile.type)}</span>
-                      <span className="tile-value">{tile.value}</span>
+                      <span className="tile-unicode">{getTileUnicode(tile.type, tile.value)}</span>
+                      <span className="tile-label">
+                        <span className="tile-type">{getTileTypeAbbreviation(tile.type)}</span>
+                        <span className="tile-value">{tile.value}</span>
+                      </span>
                     </div>
                   </div>
                 ))}
@@ -155,8 +143,11 @@ export const TileRack: React.FC<TileRackProps> = ({
               onClick={() => handleTileClick(tile)}
             >
               <div className="tile-content">
-                <span className="tile-type">{getTileTypeAbbreviation(tile.type)}</span>
-                <span className="tile-value">{tile.value}</span>
+                <span className="tile-unicode">{getTileUnicode(tile.type, tile.value)}</span>
+                <span className="tile-label">
+                  <span className="tile-type">{getTileTypeAbbreviation(tile.type)}</span>
+                  <span className="tile-value">{tile.value}</span>
+                </span>
               </div>
             </div>
           ))}

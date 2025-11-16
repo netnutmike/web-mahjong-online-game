@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Player } from '../../types';
+import { getTileUnicode, getTileTypeAbbreviation } from '../../utils/tileDisplay';
 import './PlayerIndicator.css';
 
 interface PlayerIndicatorProps {
@@ -43,8 +44,11 @@ export const PlayerIndicator: React.FC<PlayerIndicatorProps> = ({
                 <div className="set-tiles">
                   {set.tiles.map((tile, tileIndex) => (
                     <div key={`${index}-${tileIndex}`} className="set-tile">
-                      <span className="set-tile-type">{tile.type}</span>
-                      <span className="set-tile-value">{tile.value}</span>
+                      <span className="set-tile-unicode">{getTileUnicode(tile.type, tile.value)}</span>
+                      <span className="set-tile-label">
+                        <span className="set-tile-type">{getTileTypeAbbreviation(tile.type)}</span>
+                        <span className="set-tile-value">{tile.value}</span>
+                      </span>
                     </div>
                   ))}
                 </div>

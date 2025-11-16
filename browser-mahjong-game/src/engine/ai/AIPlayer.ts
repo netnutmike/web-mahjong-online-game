@@ -199,4 +199,12 @@ export class AIPlayer {
     // Evaluate and return the decision
     return this.evaluateCall(opportunity, hand, exposedSets);
   }
+
+  /**
+   * Updates the AI difficulty level
+   * @param difficulty - New difficulty level
+   */
+  updateDifficulty(difficulty: Difficulty): void {
+    this.strategy.updateDifficulty(difficulty);
+  }
 }

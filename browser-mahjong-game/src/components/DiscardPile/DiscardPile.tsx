@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Tile } from '../../types';
+import { getTileUnicode, getTileTypeAbbreviation } from '../../utils/tileDisplay';
 import './DiscardPile.css';
 
 interface DiscardPileProps {
@@ -12,19 +13,6 @@ interface DiscardPileProps {
  */
 export const DiscardPile: React.FC<DiscardPileProps> = ({ discardedTiles }) => {
   const mostRecentIndex = discardedTiles.length - 1;
-
-  const abbreviations: Record<string, string> = {
-    'bamboo': 'BAM',
-    'character': 'CRAK',
-    'dot': 'DOT',
-    'wind': 'WIND',
-    'dragon': 'DRAG',
-    'joker': 'JOKER'
-  };
-
-  const getTypeAbbreviation = (type: string): string => {
-    return abbreviations[type] || type.toUpperCase();
-  };
 
   return (
     <div className="discard-pile">
@@ -41,8 +29,11 @@ export const DiscardPile: React.FC<DiscardPileProps> = ({ discardedTiles }) => {
               }`}
             >
               <div className="discard-tile-content">
-                <span className="discard-tile-type">{getTypeAbbreviation(tile.type)}</span>
-                <span className="discard-tile-value">{tile.value}</span>
+                <span className="discard-tile-unicode">{getTileUnicode(tile.type, tile.value)}</span>
+                <span className="discard-tile-label">
+                  <span className="discard-tile-type">{getTileTypeAbbreviation(tile.type)}</span>
+                  <span className="discard-tile-value">{tile.value}</span>
+                </span>
               </div>
             </div>
           ))
