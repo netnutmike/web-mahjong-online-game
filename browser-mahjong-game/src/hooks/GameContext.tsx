@@ -93,10 +93,13 @@ export function GameProvider({ children, initialCardConfig }: GameProviderProps)
           }
 
           case GameActionType.DISCARD_TILE: {
+            console.log('DISCARD_TILE: Before discard, phase:', engine.getState().turnPhase);
             engine.discardTile(action.payload.playerId, action.payload.tile);
+            console.log('DISCARD_TILE: After discard, phase:', engine.getState().turnPhase);
             dispatch({ type: GameActionType.UPDATE_STATE, payload: { state: engine.getState() } });
 
             // Check for call opportunities
+            console.log('DISCARD_TILE: hasCallOpportunities?', engine.hasCallOpportunities());
             if (engine.hasCallOpportunities()) {
               // Process AI call decisions
               const lastDiscard = engine.getState().discardPile[engine.getState().discardPile.length - 1];
