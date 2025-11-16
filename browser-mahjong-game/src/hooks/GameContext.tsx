@@ -125,8 +125,10 @@ export function GameProvider({ children, initialCardConfig }: GameProviderProps)
             }, 500);
           } else {
             // Human has opportunities - just update state and wait for UI interaction
+            const currentState = engine.getState();
             console.log('Human has call opportunities, waiting for user input');
-            dispatch({ type: GameActionType.UPDATE_STATE, payload: { state: engine.getState() } });
+            console.log('Current state - Phase:', currentState.turnPhase, 'Current Player:', currentState.currentPlayer);
+            dispatch({ type: GameActionType.UPDATE_STATE, payload: { state: currentState } });
           }
         }
       } catch (err) {

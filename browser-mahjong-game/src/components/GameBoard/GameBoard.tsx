@@ -32,7 +32,12 @@ export const GameBoard: React.FC = () => {
   const isHumanTurn = state.currentPlayer === 0;
 
   // Get call opportunities for human player
-  const humanCallOpportunities = engine?.getHumanCallOpportunities() || [];
+  // Recalculate whenever state changes
+  const humanCallOpportunities = React.useMemo(() => {
+    const opportunities = engine?.getHumanCallOpportunities() || [];
+    console.log('GameBoard: humanCallOpportunities recalculated:', opportunities.length, 'Phase:', state.turnPhase);
+    return opportunities;
+  }, [engine, state.turnPhase]);
 
   // Handle tile selection from rack
   const handleTileSelect = (tile: Tile) => {
