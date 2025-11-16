@@ -121,8 +121,11 @@ export function GameProvider({ children, initialCardConfig }: GameProviderProps)
                 console.error('Error processing next turn:', err);
               }
             }, 500);
+          } else {
+            // Human has opportunities - just update state and wait for UI interaction
+            console.log('Human has call opportunities, waiting for user input');
+            dispatch({ type: GameActionType.UPDATE_STATE, payload: { state: engine.getState() } });
           }
-          // If human has opportunities, UI will show them
         }
       } catch (err) {
         console.error('Error processing call opportunities:', err);
